@@ -3,55 +3,211 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>متجر الشحن</title>
+  <meta name="theme-color" content="#0b1020">
+  <meta name="description" content="اختر لعبتك وابدأ تجربة شحن سهلة وسريعة.">
+  <title>متجر الشحن | شحن الألعاب</title>
   <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0b1020;
+      --surface: rgba(20, 29, 51, 0.78);
+      --muted: #aab5ca;
+      --text: #f7f8fc;
+      --orange: #ff8a3d;
+      --blue: #5794ff;
+    }
+
+    * { box-sizing: border-box; }
+
     body {
       margin: 0;
       min-height: 100vh;
       display: grid;
       place-items: center;
-      background: #101827;
-      color: white;
-      font-family: Arial, sans-serif;
+      padding: 32px 18px;
+      overflow-x: hidden;
+      background:
+        radial-gradient(ellipse at 15% 15%, rgba(87, 148, 255, .18), transparent 34%),
+        radial-gradient(ellipse at 85% 85%, rgba(255, 138, 61, .15), transparent 32%),
+        var(--bg);
+      color: var(--text);
+      font-family: Tahoma, Arial, sans-serif;
       text-align: center;
     }
 
-    main { padding: 24px; }
-    h1 { margin-bottom: 12px; }
-    p { color: #cbd5e1; }
+    main {
+      width: min(100%, 900px);
+      padding: clamp(28px, 6vw, 58px);
+      border: 1px solid rgba(255, 255, 255, .09);
+      border-radius: 30px;
+      background: var(--surface);
+      box-shadow: 0 24px 80px rgba(0, 0, 0, .35);
+      backdrop-filter: blur(14px);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 18px;
+      padding: 8px 14px;
+      border: 1px solid rgba(255, 255, 255, .1);
+      border-radius: 999px;
+      color: #d7e2f5;
+      font-size: 13px;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #4ade80;
+      box-shadow: 0 0 12px #4ade80;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(32px, 6vw, 54px);
+      line-height: 1.25;
+      letter-spacing: -.04em;
+    }
+
+    h1 span {
+      color: var(--orange);
+      background: linear-gradient(90deg, #ffb15c, #ff754c);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .intro {
+      max-width: 520px;
+      margin: 16px auto 0;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.9;
+    }
 
     .options {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+      margin-top: 38px;
+      text-align: right;
+    }
+
+    .game-card {
+      position: relative;
       display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 16px;
-      margin-top: 28px;
-    }
-
-    a {
-      display: block;
-      padding: 22px;
-      min-width: 220px;
-      border-radius: 14px;
-      background: #f97316;
-      color: white;
+      min-height: 190px;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      padding: 24px;
+      border: 1px solid rgba(255, 255, 255, .12);
+      border-radius: 22px;
+      color: var(--text);
       text-decoration: none;
-      font-size: 20px;
-      font-weight: bold;
+      transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
     }
 
-    a:last-child { background: #2563eb; }
+    .game-card::after {
+      position: absolute;
+      left: -28px;
+      bottom: -55px;
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      background: currentColor;
+      content: "";
+      opacity: .09;
+      filter: blur(2px);
+      transition: transform .25s ease;
+    }
+
+    .game-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(255, 255, 255, .3);
+      box-shadow: 0 16px 38px rgba(0, 0, 0, .24);
+    }
+
+    .game-card:hover::after { transform: scale(1.2); }
+    .free-fire { background: linear-gradient(135deg, rgba(247, 112, 52, .23), rgba(31, 38, 57, .76)); color: #ff9a54; }
+    .efootball { background: linear-gradient(135deg, rgba(62, 126, 255, .23), rgba(31, 38, 57, .76)); color: #79aaff; }
+
+    .card-icon {
+      display: grid;
+      width: 48px;
+      height: 48px;
+      place-items: center;
+      border-radius: 15px;
+      background: rgba(255, 255, 255, .1);
+      font-size: 25px;
+    }
+
+    .card-copy { position: relative; z-index: 1; color: var(--text); }
+    .card-copy h2 { margin: 0 0 7px; font-size: 21px; }
+    .card-copy p { margin: 0; color: #c2ccdd; font-size: 14px; }
+
+    .card-arrow {
+      position: absolute;
+      z-index: 1;
+      left: 22px;
+      bottom: 23px;
+      color: var(--text);
+      font-size: 22px;
+      transition: transform .2s ease;
+    }
+
+    .game-card:hover .card-arrow { transform: translateX(-4px); }
+
+    .note {
+      margin: 26px 0 0;
+      color: #8390a8;
+      font-size: 13px;
+    }
+
+    a:focus-visible { outline: 3px solid white; outline-offset: 4px; }
+
+    @media (max-width: 600px) {
+      body { padding: 18px 14px; }
+      main { padding: 30px 20px; border-radius: 24px; }
+      .options { grid-template-columns: 1fr; gap: 13px; margin-top: 28px; }
+      .game-card { min-height: 160px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+    }
   </style>
 </head>
 <body>
   <main>
-    <h1>مرحبًا بك في متجر الشحن</h1>
-    <p>اختر اللعبة التي تريد شحنها</p>
+    <p class="eyebrow">وجهتك لشحن الألعاب</p>
+    <h1>اللعب أحلى مع <span>رصيدك جاهز</span></h1>
+    <p class="intro">اختر لعبتك المفضلة للانتقال إلى صفحة الشحن. تجربة بسيطة، واضحة، ومصممة لتناسب هاتفك.</p>
 
-    <nav class="options">
-      <a href="free-fire.html">شحن جواهر فري فاير</a>
-      <a href="efootball.html">شحن كوينز بيس</a>
+    <nav class="options" aria-label="اختر اللعبة">
+      <a class="game-card free-fire" href="free-fire.html">
+        <span class="card-icon" aria-hidden="true">🔥</span>
+        <span class="card-copy">
+          <h2>فري فاير</h2>
+          <p>شحن جواهر فري فاير</p>
+        </span>
+        <span class="card-arrow" aria-hidden="true">←</span>
+      </a>
+      <a class="game-card efootball" href="efootball.html">
+        <span class="card-icon" aria-hidden="true">⚽</span>
+        <span class="card-copy">
+          <h2>eFootball</h2>
+          <p>شحن كوينز بيس</p>
+        </span>
+        <span class="card-arrow" aria-hidden="true">←</span>
+      </a>
     </nav>
+
+    <p class="note">اختر اللعبة للبدء</p>
   </main>
 </body>
 </html>
